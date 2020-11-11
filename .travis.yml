@@ -10,6 +10,7 @@ env:
     - TAG="$REPO:4.4.1"
 before_script: 
   - cd $TEST_DIR && chmod +x $TEST_SCRIPT
+  - cd $BUILD_DIR && chmod +x docker-entrypoint.sh
   - docker login quay.io -u $ROBOT -p $ROBOT_TOKEN
 script: 
   - docker build $BUILD_DIR --tag $TAG
