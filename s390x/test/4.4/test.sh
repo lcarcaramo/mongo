@@ -50,5 +50,9 @@ suite_end () {
 suite_start
         print_test_case "It can start a new mongodb container.:"
                 docker run --rm --name mongodb-container-runs -d quay.io/ibmz/mongo:4.4.1
-                print_success $(docker exec mongodb-container-runs mongo --eval db | grep test)
+                $DATABASE_FOUND=$(docker exec mongodb-container-runs mongo --eval db | grep test)
+                print_success "Success! The database \"$DATABASE_FOUND\" was found in the started quay.io/ibmz/mongo:4.4.1 container."
+                print_success "This is an indication that MongoDB started successfully and was able to initialize the \"$DATABASE_FOUND\" database."
+                print_success "Terminating..."
+                docker rm -f mongodb-container-runs
 suite_end
