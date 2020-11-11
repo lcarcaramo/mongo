@@ -1,4 +1,4 @@
-FROM quay.io/ibmz/ubuntu:20.04
+FROM quay.io/ibmz/ubuntu:18.04
 
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
 RUN groupadd -r mongodb && useradd -r -g mongodb mongodb
@@ -81,7 +81,7 @@ ENV MONGO_PACKAGE=${MONGO_PACKAGE} MONGO_REPO=${MONGO_REPO}
 ENV MONGO_MAJOR 4.4
 ENV MONGO_VERSION 4.4.1
 # bashbrew-architectures:amd64 arm64v8 s390x
-RUN echo "deb http://$MONGO_REPO/apt/ubuntu focal/${MONGO_PACKAGE}/${MONGO_MAJOR} multiverse" | tee "/etc/apt/sources.list.d/${MONGO_PACKAGE}.list"
+RUN echo "deb http://$MONGO_REPO/apt/ubuntu bionic/${MONGO_PACKAGE}/${MONGO_MAJOR} multiverse" | tee "/etc/apt/sources.list.d/${MONGO_PACKAGE}.list"
 
 RUN set -x \
 # installing "mongodb-enterprise" pulls in "tzdata" which prompts for input
