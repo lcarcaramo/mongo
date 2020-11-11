@@ -65,7 +65,7 @@ suite_start
                 
         print_test_case "It can use a custom mongod.conf config file:"
                 build "can-use-custom-config-file"
-                docker run --name custom-config-container -d "can-use-custom-config-file" || exit 1
+                docker run --name custom-config-container -d "can-use-custom-config-file" --config /etc/mongo/mongod.conf && mongod || exit 1
                 print_success "Getting config file from container:"
                 docker exec custom-config-container cat /etc/mongo/mongod.conf
                 print_success "Success! Custom image that inclues a custom mongod.conf configuration file was created and use to run a container that applies that configuration."
