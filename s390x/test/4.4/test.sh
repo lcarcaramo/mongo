@@ -57,7 +57,7 @@ suite_start
                 docker rm -f mongodb-container-runs
         print_test_case "It can connect to a remote MongoDB container:"
                 docker run --rm --name remote-mongodb-container -d quay.io/ibmz/mongo:4.4.1
-                export CONNECTION=$(docker run --network container:remote-mongo-db-container --rm quay.io/ibmz/mongo:4.4.1 mongo --host localhost test | grep mongodb://localhost:27017/test)
+                export CONNECTION=$(docker run --network container:remote-mongodb-container --rm quay.io/ibmz/mongo:4.4.1 mongo --host localhost test | grep mongodb://localhost:27017/test || exit 1)
                 print_success $CONNECTION
 
 suite_end
