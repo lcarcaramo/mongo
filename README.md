@@ -20,7 +20,7 @@ First developed by the software company 10gen (now MongoDB Inc.) in October 2007
 $ docker run --name some-mongo -d quay.io/ibmz/mongo:4.4.1
 ```
 
-... where `some-mongo` is the name you want to assign to your container and `tag` is the tag specifying the MongoDB version you want. See the list above for relevant tags.
+... where `some-mongo` is the name you want to assign to your container and `4.4.1` is the tag specifying the MongoDB version you want. See the list above for relevant tags.
 
 ## Connect to MongoDB from another Docker container
 
