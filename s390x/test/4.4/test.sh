@@ -48,11 +48,16 @@ suite_end () {
 
 
 suite_start
-        print_test_case "It can start a new mongodb container.:"
+        print_test_case "It can start a new MongoDB container:"
                 docker run --rm --name mongodb-container-runs -d quay.io/ibmz/mongo:4.4.1
                 export DATABASE_FOUND=$(docker exec mongodb-container-runs mongo --eval db | grep test)
                 print_success "Success! The database \"$DATABASE_FOUND\" was found in the started quay.io/ibmz/mongo:4.4.1 container."
-                print_success "This is an indication that MongoDB started successfully and was able to initialize the \"$DATABASE_FOUND\" database."
+                print_success "This is an indication that MongoDB started successfully, and was able to initialize the \"$DATABASE_FOUND\" database."
                 print_success "Terminating..."
                 docker rm -f mongodb-container-runs
+        print_test_case "It can connect to a remote MongoDB container:"
+                docker run --rm --name remote-mongodb-container -d quay.io/ibmz/mongo:4.4.1
+                export CONNECTION=$(docker run --network container:remote-mongo-db-container --rm quay.io/ibmz/mongo:4.4.1 mongo --host localhost test | grep mongodb://localhost:27017/test)
+                print_success $CONNECTION
+
 suite_end
