@@ -55,10 +55,19 @@ suite_start
                 print_success "This is an indication that MongoDB started successfully, and was able to initialize the \"$DATABASE_FOUND\" database."
                 print_success "Terminating..."
                 docker rm -f mongodb-container-runs
+                
         print_test_case "It can connect to a remote MongoDB container:"
                 docker run --rm --name remote-mongodb-container -d quay.io/ibmz/mongo:4.4.1
                 docker run --network container:remote-mongodb-container --rm quay.io/ibmz/mongo:4.4.1 mongo --host localhost test || exit 1
                 print_success "Success! A quay.io/ibmz/mongo:4.4.1 container was able to remotely connnect to another quay.io.ibmz/mongo:4.4.1 container."
                 print_success "Terminating remote-mongodb-container..."
                 docker rm -f remote-mongodb-container
+                
+        print_test_case "It can use a custom mongod.conf config file:"
+                build "can-use-custom-config-file"
+                docker run --name custom-config-container -d "can-use-custom-config-file" --config /etc/mongo/mongod.conf || exit 1
+                print_success "Success! Custom image that inclues a custom mongod.conf configuration file was created and use to run a container that applies that configuration."
+                print_sucesss "Terminating..."
+                docker rm -f custom-config-container
+                cleanup "can-use-custom-config-file"
 suite_end
