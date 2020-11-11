@@ -49,6 +49,6 @@ suite_end () {
 
 suite_start
         print_test_case "It can start a new mongodb container.:"
-                docker run --rm --name mongodb-container-runs -d "mongodb-container-runs"
+                docker run --rm --name mongodb-container-runs -d quay.io/ibmz/mongo:4.4.1
                 docker exec -it mongodb-container-runs mongo --evaql db
 suite_end
