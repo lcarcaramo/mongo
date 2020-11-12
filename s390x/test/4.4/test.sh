@@ -63,11 +63,11 @@ suite_start
                 print_success "Terminating remote-mongodb-container..."
                 docker rm -f remote-mongodb-container
                 
-        print_test_case "It can use a custom mongod.conf config file:"
-                build "can-use-custom-config-file"
-                docker run --name custom-config-container -d "can-use-custom-config-file"
-                print_success "Success! Custom image that inclues a custom mongod.conf configuration file was created and use to run a container that applies that configuration."
-                print_success "Terminating..."
-                docker rm -f custom-config-container
-                cleanup "can-use-custom-config-file"
+        # print_test_case "It can use a custom mongod.conf config file:"
+                # build "can-use-custom-config-file"
+                # docker run --name custom-config-container -d "can-use-custom-config-file"
+                # print_success "Success! Custom image that inclues a custom mongod.conf configuration file was created and use to run a container that applies that configuration."
+                # print_success "Terminating..."
+                # docker rm -f custom-config-container
+                # cleanup "can-use-custom-config-file"
 suite_end
