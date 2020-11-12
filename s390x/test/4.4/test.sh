@@ -31,7 +31,7 @@ print_success () {
 # Pass in path to folder where Dockerfile lives
 build () {
         print_dockerfile $1
-        docker build -q -t $1 $1
+        docker build -t $1 $1
 }
 
 cleanup () {
