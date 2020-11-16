@@ -78,20 +78,12 @@ See [the upstream "WiredTiger Options" documentation](https://docs.mongodb.com/m
 
 ## Using a custom MongoDB configuration file
 
-For a more complicated configuration setup, you can still use the MongoDB configuration file. `mongod` does not read a configuration file by default, so the `--config` option with the path to the configuration file needs to be specified. Create a custom configuration file and put it in the container by creating a custom Dockerfile `FROM quay.io/ibmz/mongo:4.4.1`. See the MongoDB manual for a full list of [configuration file](https://docs.mongodb.com/manual/reference/configuration-options/) options.
+For a more complicated configuration setup, you can still use the MongoDB configuration file. `mongod` does not read a configuration file by default, so the `--config` option with the path to the configuration file needs to be specified. Create a custom configuration file and put the configuration file in the container by putting it in a Docker volume and then mounting that volume to the container. See the MongoDB manual for a full list of [configuration file](https://docs.mongodb.com/manual/reference/configuration-options/) options.
 
-For example, `/my/custom/mongod.conf` is the path to the custom configuration file. Then custom the MongoDB image and run a container from it like the following:
+For example, the docker volume `mongo-config` contains the custom configuration file at `/mongod.conf`. Then run a `quay.io/ibmz/mongo:4.4.0` container with the `mongo-config` volume attached, and the `--config /etc/mongo/mongod.conf` command passed in.
 
-```Dockerfile
-FROM quay.io/ibmz/mongo:4.4.1
-COPY /my/custom/mongod.conf /etc/mongo/
-```
-
-Build the image and start a container from the image.
 ```console
-$ docker build . --tag custom-mongo-image
-...
-$ docker run --name custom-mongo-container -d custom-mongo-image --config /etc/mongo/mongod.conf
+$ docker run --name custom-mongo-container -v mongo-config:/etc/mongo/ -d quay.io/ibmz/mongo:4.4.0 --config /etc/mongo/mongod.conf
 ```
 
 ## Environment Variables
