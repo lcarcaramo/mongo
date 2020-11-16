@@ -55,19 +55,36 @@ suite_start
                 print_success "This is an indication that MongoDB started successfully, and was able to initialize the \"$DATABASE_FOUND\" database."
                 print_success "Terminating..."
                 docker rm -f mongodb-container-runs
-                
+
         print_test_case "It can connect to a remote MongoDB container:"
                 docker run --rm --name remote-mongodb-container -d quay.io/ibmz/mongo:4.4.1
+                sleep 2s
                 docker run --network container:remote-mongodb-container --rm quay.io/ibmz/mongo:4.4.1 mongo --host localhost test || exit 1
                 print_success "Success! A quay.io/ibmz/mongo:4.4.1 container was able to remotely connnect to another quay.io.ibmz/mongo:4.4.1 container."
                 print_success "Terminating remote-mongodb-container..."
                 docker rm -f remote-mongodb-container
-                
+
         print_test_case "It can use a custom mongod.conf config file:"
                 build "can-use-custom-config-file"
-                # docker run --name custom-config-container -d "can-use-custom-config-file"
-                # print_success "Success! Custom image that inclues a custom mongod.conf configuration file was created and use to run a container that applies that configuration."
-                # print_success "Terminating..."
-                # docker rm -f custom-config-container
+                docker run --name custom-config-container -d "can-use-custom-config-file" --config /etc/mongo/mongod.conf
+                sleep 1s
+                docker logs custom-config-container
+                print_success "Success! Custom image that inclues a custom mongod.conf configuration file was created and use to run a container that applies that configuration."
+                print_success "Terminating..."
+                docker rm -f custom-config-container
                 cleanup "can-use-custom-config-file"
+        print_test_case "It can runs as MongoDB \"superuser\", and a remote mongo container can connect to it as \"superuser\":"
+                docker run -d --name mongo-super-container \
+                       -e MONGO_INITDB_ROOT_USERNAME=mongoadmin \
+                       -e MONGO_INITDB_ROOT_PASSWORD=password \
+                       quay.io/ibmz/mongo:4.4.1
+                sleep 3s
+                docker run --rm --network container:mongo-super-container quay.io/ibmz/mongo:4.4.1 \
+                       mongo --host localhost \
+                             -u mongoadmin \
+                             -p password \
+                             --authenticationDatabase admin \
+                             test
+                docker rm -f mongo-super-container
 suite_end
+
