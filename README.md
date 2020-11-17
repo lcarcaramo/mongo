@@ -122,10 +122,15 @@ This variable allows you to specify the name of a database to be used for creati
 
 ## Docker Secrets
 
-As an alternative to passing sensitive information via environment variables, `_FILE` may be appended to the previously listed environment variables, causing the initialization script to load the values for those variables from files present in the container. In particular, this can be used to load passwords from Docker secrets stored in `/run/secrets/<secret_name>` files. For example:
+As an alternative to passing sensitive information via environment variables, `_FILE` may be appended to the previously listed environment variables, causing the initialization script to load the values for those variables from files present in the container. In particular, this can be used to load passwords from Docker secrets stored in `/run/secrets/<secret_name>` files. This is only available when using docker swarm or docker compose to run your containers. For example with docker swarm enabled:
 
 ```console
-$ docker run --name some-mongo -e MONGO_INITDB_ROOT_PASSWORD_FILE=/run/secrets/mongo-root -d quay.io/ibmz/mongo:4.4.1
+$ printf "/my/mongo/root" | docker secret create mongo-root -
+$ docker service create
+    --name some-mongo
+    --secret mongo-root
+    --env MONGO_INITDB_ROOT_PASSWORD_FILE=/run/secrets/mongo-root"
+    quay.io/ibmz/mongo:4.4.1  
 ```
 
 Currently, this is only supported for `MONGO_INITDB_ROOT_USERNAME` and `MONGO_INITDB_ROOT_PASSWORD`.
