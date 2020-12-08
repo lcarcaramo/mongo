@@ -1,8 +1,10 @@
 # Tags
-> _Built from [`quay.io/ibmz/ubuntu:18.04`](https://quay.io/repository/ibmz/ubuntu?tab=info)_
--	[`4.4.1`](https://github.com/lcarcaramo/mongo/blob/master/s390x/4.4/Dockerfile) - [![Build Status](https://travis-ci.com/lcarcaramo/mongo.svg?branch=master)](https://travis-ci.com/lcarcaramo/mongo)
+> _Built from [`quay.io/ibm/ubuntu:18.04`](https://quay.io/repository/ibm/ubuntu?tab=info)_
+-	`4.4.1` - [![Build Status](https://travis-ci.com/lcarcaramo/mongo.svg?branch=master)](https://travis-ci.com/lcarcaramo/mongo)
 
-# What is MongoDB?
+### __[Original Source Code](https://github.com/docker-library/mongo)__
+
+# MongoDB
 
 MongoDB is a [free and open-source cross-platform document-oriented database](https://en.wikipedia.org/wiki/Document-oriented_database) program. Classified as a [NoSQL](https://en.wikipedia.org/wiki/NoSQL) database program, MongoDB uses [JSON](https://en.wikipedia.org/wiki/JSON)-like documents with [schemata](https://en.wikipedia.org/wiki/Database_schema). MongoDB is developed by [MongoDB Inc.](https://en.wikipedia.org/wiki/MongoDB_Inc.), and is published under a combination of the [Server Side Public License](https://www.mongodb.com/licensing/server-side-public-license) and the [Apache License](https://en.wikipedia.org/wiki/Apache_License).
 
@@ -17,7 +19,7 @@ First developed by the software company 10gen (now MongoDB Inc.) in October 2007
 ## Start a `mongo` server instance
 
 ```console
-$ docker run --name some-mongo -d quay.io/ibmz/mongo:4.4.1
+$ docker run --name some-mongo -d quay.io/ibm/mongo:4.4.1
 ```
 
 ... where `some-mongo` is the name you want to assign to your container and `4.4.1` is the tag specifying the MongoDB version you want. See the list above for relevant tags.
@@ -27,7 +29,7 @@ $ docker run --name some-mongo -d quay.io/ibmz/mongo:4.4.1
 The MongoDB server in the image listens on the standard MongoDB port, `27017`, so connecting via Docker networks will be the same as connecting to a remote `mongod`. The following example starts another MongoDB container instance and runs the `mongo` command line client against the original MongoDB container from the example above, allowing you to execute MongoDB statements against your database instance:
 
 ```console
-$ docker run -it --network some-network --rm quay.io/ibmz/mongo:4.4.1 mongo --host some-mongo test
+$ docker run -it --network some-network --rm quay.io/ibm/mongo:4.4.1 mongo --host some-mongo test
 ```
 
 ... where `some-mongo` is the name of your original `mongo` container.
@@ -55,13 +57,13 @@ See the [MongoDB manual](https://docs.mongodb.com/manual/) for information on us
 Most MongoDB configuration can be set through flags to `mongod`. The entrypoint of the image is created to pass its arguments along to `mongod`. See below an example of setting MongoDB to use a different [threading and execution model](https://docs.mongodb.com/manual/reference/program/mongod/#cmdoption-mongod-serviceexecutor) via `docker run`.
 
 ```console
-$ docker run --name some-mongo -d quay.io/ibmz/mongo:4.4.1 --serviceExecutor adaptive
+$ docker run --name some-mongo -d quay.io/ibm/mongo:4.4.1 --serviceExecutor adaptive
 ```
 
 To see the full list of possible options, check the MongoDB manual on [`mongod`](https://docs.mongodb.com/manual/reference/program/mongod/) or check the `--help` output of `mongod`:
 
 ```console
-$ docker run -it --rm quay.io/ibmz/mongo:4.4.1 --help
+$ docker run -it --rm quay.io/ibm/mongo:4.4.1 --help
 ```
 
 ## Setting WiredTiger cache size limits
@@ -71,7 +73,7 @@ By default Mongo will set the `wiredTigerCacheSizeGB` to a value proportional to
 Taking the examples above you can configure the cache size to use 1.5GB as:
 
 ```console
-$ docker run --name some-mongo -d quay.io/ibmz/mongo:4.4.1 --wiredTigerCacheSizeGB 1.5
+$ docker run --name some-mongo -d quay.io/ibm/mongo:4.4.1 --wiredTigerCacheSizeGB 1.5
 ```
 
 See [the upstream "WiredTiger Options" documentation](https://docs.mongodb.com/manual/reference/program/mongod/#wiredtiger-options) for more details.
@@ -83,7 +85,7 @@ For a more complicated configuration setup, you can still use the MongoDB config
 For example, the docker volume `mongo-config` contains the custom configuration file at `/mongod.conf`. Then run a `quay.io/ibmz/mongo:4.4.0` container with the `mongo-config` volume attached, and the `--config /etc/mongo/mongod.conf` command passed in.
 
 ```console
-$ docker run --name custom-mongo-container -v mongo-config:/etc/mongo/ -d quay.io/ibmz/mongo:4.4.0 --config /etc/mongo/mongod.conf
+$ docker run --name custom-mongo-container -v mongo-config:/etc/mongo/ -d quay.io/ibm/mongo:4.4.0 --config /etc/mongo/mongod.conf
 ```
 
 ## Environment Variables
@@ -100,10 +102,10 @@ The following is an example of using these two variables to create a MongoDB ins
 $ docker run -d --network some-network --name some-mongo \
 	-e MONGO_INITDB_ROOT_USERNAME=mongoadmin \
 	-e MONGO_INITDB_ROOT_PASSWORD=secret \
-	quay.io/ibmz/mongo:4.4.1
+	quay.io/ibm/mongo:4.4.1
 
 $ docker run -it --rm --network some-network mongo \
-	quay.io/ibmz/mongo:4.4.1 --host some-mongo \
+	quay.io/ibm/mongo:4.4.1 --host some-mongo \
 		-u mongoadmin \
 		-p secret \
 		--authenticationDatabase admin \
@@ -130,7 +132,7 @@ $ docker service create
     --name some-mongo
     --secret mongo-root
     --env MONGO_INITDB_ROOT_PASSWORD_FILE=/run/secrets/mongo-root"
-    quay.io/ibmz/mongo:4.4.1  
+    quay.io/ibm/mongo:4.4.1  
 ```
 
 Currently, this is only supported for `MONGO_INITDB_ROOT_USERNAME` and `MONGO_INITDB_ROOT_PASSWORD`.
